@@ -1,0 +1,21 @@
+Screw functions relying on one situation, make it general: 
+
+Import all the things you will need
+
+Define prompt(omega l, omega k, omega m):
+       
+
+what is affermative response?
+what is negative response? 
+
+
+Define main ():
+       prompt: Do you want to specify omega values?
+       	       if affermative lowercase response:
+	             omega l = prompt: What value of l?
+		     omega k = prompt: what value of k?
+		     omega m = prompt: what value of m?
+		           prompt(omega l, omega k, omega m)
+               else if negative lowercase response:
+	             prompt (.7,0,.3)
+		     
