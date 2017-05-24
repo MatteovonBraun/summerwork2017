@@ -37,13 +37,12 @@ def getR():
 
      
 def plotLR():
-    
-
     plt.plot(L,R, 'g.')
     plt.axis([41,46.5,24,30.5])
     plt.xlabel('log(L)')
     plt.ylabel('log(R)')
     plt.title('Luminosity vs Radius')
+    plt.show()
 
 
 getL()
