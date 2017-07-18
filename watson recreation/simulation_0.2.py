@@ -3,7 +3,7 @@
 
 Montey Carlo Simulation of the Luminsity - Radius Relationship
   
-Version: 0.1
+Version: 0.2
 
 Authors: McDonnell, Matteo; Moore, Marc
 
@@ -28,40 +28,48 @@ TO DO:
 
 """
 
+
 ############# INITIALIZATION ##############
+raw1 = pd.read_csv('mbh_measurements.csv')
+raw2 = pd.read_csv('table1_ascii.csv')
 
+raw1.set_index('#RMID')
+raw2.set_index('#RMID')
 
-raw = pd.read_csv('CSVResults z.csv')
-raw.sort_values(by='name1')
+trim1 = raw1[['redshift','tau_cent','tau_cent_uperr','tau_cent_loerr']]
+trim2 = raw2[['wLw']]
 
+full1 = pd.DataFrame(trim1.join(trim2, how='inner'))
+full1 = full1[full1.wLw != -99.0]
 
 ############# COMPUTATION ###########################
+
 def t_log(row, column):
     log = m.log10(row[column])
     return log 
     
     
-raw['log_t_cent'] = raw.apply(lambda row: t_log(row,'t_cent'), axis = 1)
+full1['log_t_cent'] = full1.apply(lambda row: t_log(row,'tau_cent'), axis = 1)
 
 def t_err_log(row, val_column, err_column):
     err = row[val_column]/(row[err_column]*m.log(10))
     return err
 
 
-raw['log_t_c_perr'] = raw.apply(lambda row: t_err_log(row,'t_cent','t_c_perr'), axis = 1)
+full1['log_t_c_perr'] = full1.apply(lambda row: t_err_log(row,'tau_cent','tau_c_perr'), axis = 1)
 
 #to deal with that '10^44' in equation (2) in Bentz et. al. 
 def L_44(row):
     return row['log_L_agn'] - 44
     
-raw['log_L_agn_44'] = raw.apply(lambda row: L_44(row), axis = 1)
+full1['log_L_agn_44'] = full1.apply(lambda row: L_44(row), axis = 1)
 
 #LINE OF BEST FIT#
 
-L = raw['log_L_agn_44']
-t = raw['log_t_cent']
-L_err = raw['log_L_agn_err']
-t_err = raw['log_t_c_perr'] 
+L = full1['log_L_agn_44']
+t = full1['log_t_cent']
+L_err = full1['log_L_agn_err']
+t_err = full1['log_t_c_perr'] 
 
 #remember, everything is in log, so when we are converting back we will have 
 #to convert the linear functio too. 
@@ -99,7 +107,7 @@ fig, pl = plt.subplots()
 
 #using the output of ODR:
 
-x0 = list(np.arange(min(raw['log_L_agn_44']),max(raw['log_L_agn_44']),.01))
+x0 = list(np.arange(min(full1['log_L_agn_44']),max(full1['log_L_agn_44']),.01))
 y0 = list(map(lambda x: x*m+c, x0))
 
 
