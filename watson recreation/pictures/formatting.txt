@@ -1,0 +1,5 @@
+The format of all images should be the following:
+
+yyyy-mm-dd-[basic name of plot]-[what makes this plot exceptional to other plots of the same name].png
+
+(year month day cause that is the best way to write dates cause sigfigs work the same way in regular numbers)

@@ -7,5 +7,5 @@ Also, make branches for everything. Wanna keep this shit clean.
 
 *HAVE FUN*
 
-
+Also, we really screwed up with version management, whoops. 
 
